@@ -11,6 +11,7 @@ export interface TimerView
 {
   mode: TimerMode;
   running: boolean;
+  alarm: boolean;
   remainingMs: number;
   elapsedMs: number;
   countdownParts: CountdownParts;
@@ -29,6 +30,7 @@ export function useTimer(onElapsed: (deltaMs: number) => void): TimerView
   const [targetTotalMs, setTargetTotalMs] = useState<number>(0);
   const [elapsedBaseMs, setElapsedBaseMs] = useState<number>(0);
   const [runStartedAt, setRunStartedAt] = useState<number | null>(null);
+  const [alarm, setAlarm] = useState(false);
   const [, setNow] = useState<number>(Date.now());
   const onElapsedRef = useRef(onElapsed);
   onElapsedRef.current = onElapsed;
@@ -48,6 +50,7 @@ export function useTimer(onElapsed: (deltaMs: number) => void): TimerView
     {
       return;
     }
+    setAlarm(false);
     setRunStartedAt(Date.now());
   }
 
@@ -71,12 +74,14 @@ export function useTimer(onElapsed: (deltaMs: number) => void): TimerView
 
   function reset(): void
   {
+    setAlarm(false);
     setElapsedBaseMs(0);
     setRunStartedAt(null);
   }
 
   function finish(): void
   {
+    setAlarm(false);
     if (!running)
     {
       return;
@@ -125,6 +130,7 @@ export function useTimer(onElapsed: (deltaMs: number) => void): TimerView
           if (mode === "countdown" && remainingMsOfTarget(targetTotalMs, totalConsumedMs(elapsedBaseMs, runStartedAt, current)) <= 0)
           {
             stopRun(current);
+            setAlarm(true);
           }
         },
         250
@@ -143,6 +149,7 @@ export function useTimer(onElapsed: (deltaMs: number) => void): TimerView
   return {
     mode,
     running,
+    alarm,
     remainingMs: remaining,
     elapsedMs: consumedMs,
     countdownParts: parts,

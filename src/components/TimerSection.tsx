@@ -1,14 +1,34 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CountdownEditor } from "./CountdownEditor";
 import { ModeSwitch } from "./ModeSwitch";
 import { TimerControls } from "./TimerControls";
 import { TimerDisplay } from "./TimerDisplay";
+import alarmSong from "../../songs/timer-app_ocarina-of-time.mp3";
 import type { TimerView } from "../hooks/useTimer";
 import type { TasksApi } from "../hooks/useTasks";
 
 export function TimerSection({ api, tasks }: { api: TimerView; tasks: TasksApi })
 {
   const [showTarget, setShowTarget] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    if (!api.alarm) {
+      audioRef.current?.pause();
+      if (audioRef.current) audioRef.current.currentTime = 0;
+      return;
+    }
+    const audio = new Audio(alarmSong);
+    audio.loop = true;
+    audioRef.current = audio;
+    void audio.play().catch(() => {
+      // Browsers may block playback when the page has not received user input.
+    });
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+      if (audioRef.current === audio) audioRef.current = null;
+    };
+  }, [api.alarm]);
   const targetMinutes = api.countdownParts.hours * 60 + api.countdownParts.minutes;
   return (
     <section className="timer-panel">
