@@ -51,7 +51,9 @@ export function useTimer(onElapsed: (deltaMs: number) => void): TimerView
       return;
     }
     setAlarm(false);
-    setRunStartedAt(Date.now());
+    const startedAt = Date.now();
+    lastTickAt.current = startedAt;
+    setRunStartedAt(startedAt);
   }
 
   function pause(): void
@@ -69,7 +71,9 @@ export function useTimer(onElapsed: (deltaMs: number) => void): TimerView
     {
       return;
     }
-    setRunStartedAt(Date.now());
+    const resumedAt = Date.now();
+    lastTickAt.current = resumedAt;
+    setRunStartedAt(resumedAt);
   }
 
   function reset(): void
