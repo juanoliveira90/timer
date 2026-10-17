@@ -19,7 +19,7 @@ export function TaskItem({ api, task, isCurrent, running, editing, onStartEdit, 
   return (
     <li className={`task-row ${active ? "active-task" : ""}`}>
       <button type="button" className="task-check" aria-label={`Select ${task.title || "task"}`} onClick={() => api.setCurrentTask?.(task.id)} />
-      <div className="task-copy"><button type="button" className="task-name" onClick={() => { setDraftTitle(task.title); onStartEdit(); }}>{task.title || "Untitled task"}</button><span className="task-project">Studio North{active && <em> · Tracking now</em>}</span></div>
+      <div className="task-copy"><button type="button" className="task-name" onClick={() => { setDraftTitle(task.title); onStartEdit(); }}>{task.title || "Untitled task"}</button><span className="task-project">{active && <em> · Tracking now</em>}</span></div>
       <span className="task-time">{formatClock(task.accumulatedMs)}</span>
       <button type="button" className="task-remove" aria-label={`Remove ${task.title || "task"}`} onClick={() => api.removeTask(task.id)}>×</button>
     </li>

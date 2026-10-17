@@ -48,7 +48,6 @@ export function TimerSection({ api, tasks }: { api: TimerView; tasks: TasksApi }
           <option value="">Select a task</option>
           {tasks.tasks.map((task) => <option key={task.id} value={task.id}>{task.title || "Untitled task"}</option>)}
         </select>
-        <div className="sound-note">◖ &nbsp;Chime when finished</div>
       </div>
     </section>
   );

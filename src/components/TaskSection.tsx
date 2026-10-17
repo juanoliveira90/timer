@@ -15,13 +15,13 @@ export function TaskSection({ api, running }: TaskSectionProps)
   }
   return (
     <section className="tasks-panel">
-      <div className="tasks-heading"><h2>Your tasks</h2><span className="task-count">{String(api.tasks.length).padStart(2, "0")}</span><button type="button" className="date-filter">Today⌄</button></div>
-      <div className="task-columns"><span>Task / project</span><span>Time today</span></div>
+      <div className="tasks-heading"><h2>Your tasks</h2></div>
+      <div className="task-columns"><span>Task / project</span><span>Time worked</span></div>
       <ul className="task-list" role="list">
         {api.tasks.map((task) => <TaskItem key={task.id} api={api} task={task} isCurrent={api.currentTask?.id === task.id} running={running} editing={editingTaskId === task.id} onStartEdit={() => setEditingTaskId(task.id)} onCommitEdit={(title) => { api.renameTask(task.id, title); setEditingTaskId(null); }} onCancelEdit={() => setEditingTaskId(null)} />)}
       </ul>
       <AddTaskButton onAdd={handleAddTask} />
-      <div className="task-summary"><span>{api.tasks.length ? `0 of ${api.tasks.length} completed` : "No tasks yet"}</span><button type="button" disabled>Clear completed</button></div>
+      <div className="task-summary"><span>{api.tasks.length ? `0 of ${api.tasks.length} completed` : "No tasks yet"}</span></div>
     </section>
   );
 }
